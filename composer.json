@@ -1,0 +1,29 @@
+{
+    "name": "saptarshidey/database-viewer",
+    "description": "A Laravel package for viewing databases",
+    "type": "composer-plugin",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "SaptarshiDy\\DatabaseViewer\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Saptarshi Dey",
+            "email": "saptarshi7047@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {},
+    "extra": {
+        "laravel": {
+            "providers": [
+                "SaptarshiDy\\DatabaseViewer\\DatabaseViewerServiceProvider"
+            ],
+            "aliases": {
+                "DatabaseViewer": "SaptarshiDy\\DatabaseViewer\\Facade"
+            }
+        }
+    }
+}
