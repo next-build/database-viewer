@@ -87,6 +87,7 @@
 
     </div>
 
+    <!--Table-->
     <div class="overflow-x-auto table-scrollbar mt-4">
         <table class="mb-4" :style="{ width: 'max-content', minWidth: '100%' }">
             <thead>
@@ -109,7 +110,7 @@
             </tbody>
         </table>
     </div>
-
+    
     <!--Pagination-->
     <div class="mt-8">
         <nav class="flex items-center justify-between border-t border-gray-200 px-4 sm:px-0">
