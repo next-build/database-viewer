@@ -20,6 +20,8 @@
                         :columns="tableData.columns"
                         :records="tableData.records"
                         @paginate="(page) => handleLoadTable(page)"
+                        @perPage="(paginate) => handleLoadTable(null, paginate)"
+                        @filterQuery="(filter) => handleLoadTable(null, null, filter)"
                     />
                 </div>
 
@@ -37,9 +39,9 @@
 </template>
 <script setup>
 import { ref } from 'vue';
-import Header from '../layouts/Header';
-import Sidebar from '../layouts/Sidebar';
-import Table from '../components/Table';
+import Header from '../Layouts/Header';
+import Sidebar from '../Layouts/Sidebar';
+import Table from './Partials/Table';
 import { fetchDatabaseTable } from '../Utils/api';
 
 const database = ref(null);
@@ -50,10 +52,9 @@ const tableData = ref({
     records: []
 });
 
-const handleLoadTable = async (page) => {
-    const data = await fetchDatabaseTable(database.value, table.value, page);
+const handleLoadTable = async (page, paginate, filter) => {
+    const data = await fetchDatabaseTable(database.value, table.value, page, paginate, filter);
     if (data.length !== 0) {
-        console.log(data.records);
         tableData.value.columns = data.columns;
         tableData.value.records = data.records;
     }

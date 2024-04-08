@@ -37,9 +37,18 @@ class ApiController
 
     function table(Request $request, $database, $table)
     {
+
+        $column = $request->input('column');
+        $operator = $request->input('operator');
+        $query = $request->input('query');
+
         DB::statement("USE `$database`");
         $columns = Schema::getColumnListing($table);
-        $records = DB::table($table)->paginate(10);
+        $records = DB::table($table)
+        ->when($column && $operator && $query, function($q) use ($column, $operator, $query) {
+            return $q->where($column, $operator, $query);
+        })
+        ->paginate($request->paginate ?? 10);
 
         return response()->json([
             'columns' => $columns,
