@@ -38,15 +38,21 @@ class ApiController
     function table(Request $request, $database, $table)
     {
 
-        $column = $request->input('column');
-        $operator = $request->input('operator');
-        $query = $request->input('query');
+        $filter_column = $request->input('filter_column');
+        $filter_operator = $request->input('filter_operator');
+        $filter_query = $request->input('filter_query');
+
+        $sort_column = $request->input('sort_column');
+        $sort_order = $request->input('sort_order');
 
         DB::statement("USE `$database`");
         $columns = Schema::getColumnListing($table);
         $records = DB::table($table)
-        ->when($column && $operator && $query, function($q) use ($column, $operator, $query) {
-            return $q->where($column, $operator, $query);
+        ->when($filter_column && $filter_operator && $filter_query, function($q) use ($filter_column, $filter_operator, $filter_query) {
+            return $q->where($filter_column, $filter_operator, $filter_query);
+        })
+        ->when($sort_column && $sort_order, function($q) use ($sort_column, $sort_order) {
+            return $q->orderBy($sort_column, $sort_order);
         })
         ->paginate($request->paginate ?? 10);
 

@@ -18,15 +18,18 @@ export const fetchTables = async (database) => {
     }
 }
 
-export const fetchDatabaseTable = async (database, table, page = 1, paginate = 10, filter = null) => {
+export const fetchDatabaseTable = async (database, table, page = 1, paginate = 10, filter = null, sort = null) => {
     const response = await axios.get(`${window.location.origin}/database-viewer/api/${database}/${table}`, {
         params: {
             page: page,
             paginate: paginate,
 
-            column: filter?.column,
-            operator: filter?.condition,
-            query: filter?.query,
+            filter_column: filter?.column,
+            filter_operator: filter?.operator,
+            filter_query: filter?.query,
+
+            sort_column: sort?.column,
+            sort_order: sort?.order,
         }
     })
 

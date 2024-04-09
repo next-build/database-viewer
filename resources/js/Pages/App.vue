@@ -19,9 +19,7 @@
                     <Table
                         :columns="tableData.columns"
                         :records="tableData.records"
-                        @paginate="(page) => handleLoadTable(page)"
-                        @perPage="(paginate) => handleLoadTable(null, paginate)"
-                        @filterQuery="(filter) => handleLoadTable(null, null, filter)"
+                        @recall="handleLoadTable"
                     />
                 </div>
 
@@ -52,8 +50,8 @@ const tableData = ref({
     records: []
 });
 
-const handleLoadTable = async (page, paginate, filter) => {
-    const data = await fetchDatabaseTable(database.value, table.value, page, paginate, filter);
+const handleLoadTable = async (page, paginate, filter, sort) => {
+    const data = await fetchDatabaseTable(database.value, table.value, page, paginate, filter, sort);
     if (data.length !== 0) {
         tableData.value.columns = data.columns;
         tableData.value.records = data.records;
