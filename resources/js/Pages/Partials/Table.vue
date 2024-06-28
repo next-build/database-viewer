@@ -1,103 +1,55 @@
 <template>
-    <!--Filter-->
-    <div class="flex flex-row gap-4 items-center pt-2">
 
-        <div class="flex-1 flex flex-row gap-4 items-center">
-            <div class="">
-                <div class="relative rounded-md shadow-sm">
-                    <select id="operator" name="operator"
-                        class="appearance-none block w-full rounded-md border-0 py-2.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2"
-                        @change="(e) => {
-                            filter.operator = e.target.value;
-                        }"
-                    >
-                        <option :selected="filter.operator === null" disabled>Select Operator</option>
-                        <option 
-                            v-for="value in operators" :key="value"
-                            :selected="value == filter.operator"
-                        >
-                            {{ value }}
-                        </option>
-                    </select>
-                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 rotate-90">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
-                        </svg>
-                    </div>
-                </div>
-            </div>
+    <Drawer />
 
-            <div class="">
-                <div class="relative rounded-md shadow-sm">
-                    <select id="column" name="column"
-                        class="appearance-none block w-full rounded-md border-0 py-2.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2"
-                        @change="(e) => {
-                            filter.column = e.target.value;
-                        }"
-                    >
-                        <option :selected="filter.column === null" disabled>Select Column</option>
-                        <option 
-                            v-for="(column, index) in props.columns" :key="index"
-                            :selected="column == filter.column"
-                        >
-                            {{ column }}
-                        </option>
-                    </select>
-                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 rotate-90">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
-                        </svg>
-                    </div>
-                </div>
-            </div>
+    <div class="flex pt-2">
 
-            <div class="">
-                <input type="text" name="query" id="query" autocomplete="false"
-                    class="block w-full rounded-md border-0 py-2.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400"
-                    placeholder="Search.."
-                    @input="(e) => filter.query = e.target.value"
-                    :value="filter.query"
+        <div class="flex-1">
+
+            <!--Sidebar Visibility-->
+            <button 
+                type="button"
+                class="rounded-md bg-gray-800 px-3 py-3 text-sm font-semibold text-white shadow-sm hover:bg-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600"
+                @click="isSidebar =! isSidebar"
+            >
+                <svg 
+                    v-if="isSidebar"
+                    xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-left"
                 >
-            </div>
+                    <path d="m15 18-6-6 6-6"/>
+                </svg>
+                <svg 
+                    v-else
+                    xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right"
+                >
+                    <path d="m9 18 6-6-6-6"/>
+                </svg>
+            </button>
 
-            <div class="flex flex-row gap-2">
-                <button 
-                    type="button"
-                    class="rounded-md bg-gray-800 px-3 py-3 text-sm font-semibold text-white shadow-sm hover:bg-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600"
-                    @click="emit('recall', null, perPageDataLimit, filter, sort)"
-                >
-                    Filter
-                </button>
-                <button 
-                    class="border-2 border-black p-1 rounded-md hover:bg-red-500 hover:text-white"
-                    @click="() => {
-                        filter = clearObject(filter);
-                        emit('recall', null, perPageDataLimit, filter, sort);
-                    }"
-                >
-                    <XCircleIcon class="w-7 h-7" />
-                </button>
-            </div>
+            
+
         </div>
 
-        <!--Sorting-->
-        <div class="flex-1 flex flex-row gap-4 items-center">
+        <div class="flex-1 flex flex-row-reverse gap-4">
 
+            <!--Pagination-->
             <div class="">
                 <div class="relative rounded-md shadow-sm">
-                    <select id="column" name="column"
-                        class="appearance-none block w-full rounded-md border-0 py-2.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2"
+                    <select id="perpage" name="perpage"
+                        class="appearance-none block w-full rounded-md border-0 py-3 pl-3 pr-10 text-black ring-1 ring-inset ring-gray-300 text-sm sm:leading-6"
                         @change="(e) => {
-                            sort.column = e.target.value;
+                            perPageDataLimit = e.target.value;
+                            emit('recall', null, perPageDataLimit, filter, sort);
                         }"
                     >
-                        <option :selected="sort.column === null" disabled>Select Column</option>
-                        <option 
-                            v-for="(column, index) in props.columns" :key="index"
-                            :selected="column == sort.column"
-                        >
-                            {{ column }}
-                        </option>
+                        <option>10</option>
+                        <option>25</option>
+                        <option>50</option>
+                        <option>100</option>
                     </select>
                     <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 rotate-90">
@@ -107,70 +59,36 @@
                 </div>
             </div>
 
-            <div class="">
-                <div class="relative rounded-md shadow-sm">
-                    <select id="order" name="order"
-                        class="appearance-none block w-full rounded-md border-0 py-2.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2"
-                        @change="(e) => {
-                            sort.order = e.target.value;
-                        }"
-                    >
-                        <option :selected="sort.order === null" disabled>Select Order</option>
-                        <option v-for="value in ['ASC', 'DESC']" :key="value" :selected="value == sort.order">
-                            {{ value }}
-                        </option>
-                    </select>
-                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 rotate-90">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
-                        </svg>
-                    </div>
-                </div>
-            </div>
+            <button 
+                type="button"
+                class="rounded-md bg-gray-800 px-3 py-3 text-sm font-semibold text-white shadow-sm hover:bg-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600"
+                @click="emit('recall', null, perPageDataLimit, filter, sort)"
+            >
+                Columns Visibility
+            </button>
 
-            <div class="flex flex-row gap-2">
-                <button 
-                    type="button"
-                    class="rounded-md bg-gray-800 px-3 py-3 text-sm font-semibold text-white shadow-sm hover:bg-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600"
-                    @click="emit('recall', null, perPageDataLimit, filter, sort)"
-                >
-                    Sort
-                </button>
-                <button 
-                    class="border-2 border-black p-1 rounded-md hover:bg-red-500 hover:text-white"
-                    @click="(e) => {
-                        sort = clearObject(sort);
-                        emit('recall', null, perPageDataLimit, filter, sort);
-                    }"
-                >
-                    <XCircleIcon class="w-7 h-7" />
-                </button>
-            </div>
-        </div>
+            <button 
+                type="button"
+                class="rounded-md bg-gray-800 px-3 py-3 text-sm font-semibold text-white shadow-sm hover:bg-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600"
+                @click="isSortColumns =! isSortColumns"
+            >
+                Sort Columns
+            </button>
 
-        <div class="">
-            <div class="relative rounded-md shadow-sm">
-                <select id="perpage" name="perpage"
-                    class="appearance-none block w-full rounded-md border-0 py-2.5 pl-3 pr-10 text-black ring-1 ring-inset ring-gray-300 sm:text-sm sm:leading-6"
-                    @change="(e) => {
-                        perPageDataLimit = e.target.value;
-                        emit('recall', null, perPageDataLimit, filter, sort);
-                    }"
-                >
-                    <option>10</option>
-                    <option>25</option>
-                    <option>50</option>
-                    <option>100</option>
-                </select>
-                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 rotate-90">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
-                    </svg>
-                </div>
-            </div>
+            <button 
+                type="button"
+                class="rounded-md bg-gray-800 px-3 py-3 text-sm font-semibold text-white shadow-sm hover:bg-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600"
+                @click="isAdvanceSearch =! isAdvanceSearch"
+            >
+                Advance Search
+            </button>
+
         </div>
 
     </div>
+
+    <!--Filter-->
+    <!-- <div class="flex flex-row-reverse gap-4 items-center pt-2"></div> -->
 
     <!--Table-->
     <div class="overflow-x-auto table-scrollbar mt-4">
@@ -178,7 +96,7 @@
             <thead>
                 <tr>
                     <th v-for="(header, index) in props.columns" :key="index"
-                        class="px-4 py-2 bg-gray-200 border border-gray-300" :style="{ width: 150 + 'px' }">
+                        class="px-4 py-2 bg-gray-200 border border-gray-300">
                         <!-- <div
                             class="resize-handle absolute top-0 bottom-0 right-0 w-4 bg-gray-400 hover:bg-gray-500 cursor-col-resize"
                         ></div> -->
@@ -187,9 +105,11 @@
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="(row, rowIndex) in props.records.data" :key="rowIndex">
+                <tr v-for="(row, rowIndex) in props.records.data" :key="rowIndex" class="hover:bg-gray-100">
                     <td v-for="(cell, cellIndex) in row" :key="cellIndex" class="px-4 py-2 border border-gray-300">
-                        {{ cell }}
+                        <div class="truncate max-w-52">
+                            {{ cell }}
+                        </div>
                     </td>
                 </tr>
             </tbody>
@@ -257,12 +177,175 @@
             </div>
         </nav>
     </div>
+
+    <!--Search Drawer-->
+    <Drawer 
+        v-model="isAdvanceSearch"
+        title="Advance Search"
+    >
+        <div class="flex flex-col gap-4">
+            <div class="">
+                <div class="relative rounded-md shadow-sm">
+                    <select id="operator" name="operator"
+                        class="appearance-none block w-full rounded-md border-0 py-2.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2"
+                        @change="(e) => {
+                            filter.operator = e.target.value;
+                        }"
+                    >
+                        <option :selected="filter.operator === null" disabled>Select Operator</option>
+                        <option 
+                            v-for="value in operators" :key="value"
+                            :selected="value == filter.operator"
+                        >
+                            {{ value }}
+                        </option>
+                    </select>
+                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 rotate-90">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+                        </svg>
+                    </div>
+                </div>
+            </div>
+
+            <div class="">
+                <div class="relative rounded-md shadow-sm">
+                    <select id="column" name="column"
+                        class="appearance-none block w-full rounded-md border-0 py-2.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2"
+                        @change="(e) => {
+                            filter.column = e.target.value;
+                        }"
+                    >
+                        <option :selected="filter.column === null" disabled>Select Column</option>
+                        <option 
+                            v-for="(column, index) in props.columns" :key="index"
+                            :selected="column == filter.column"
+                        >
+                            {{ column }}
+                        </option>
+                    </select>
+                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 rotate-90">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+                        </svg>
+                    </div>
+                </div>
+            </div>
+
+            <div class="">
+                <input type="text" name="query" id="query" autocomplete="false"
+                    class="block w-full rounded-md border-0 py-2.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400"
+                    placeholder="Search.."
+                    @input="(e) => filter.query = e.target.value"
+                    :value="filter.query"
+                >
+            </div>
+
+            <div class="flex flex-row gap-2">
+                <button 
+                    type="button"
+                    class="flex-1 rounded-md bg-gray-800 px-3 py-3 text-sm font-semibold text-white shadow-sm hover:bg-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600"
+                    @click="emit('recall', null, perPageDataLimit, filter, sort)"
+                >
+                    Search
+                </button>
+                <button 
+                    class="flex-1 border-2 border-black p-1 rounded-md hover:bg-red-500 hover:text-white"
+                    @click="() => {
+                        filter = clearObject(filter);
+                        emit('recall', null, perPageDataLimit, filter, sort);
+                    }"
+                >
+                    <!-- <XCircleIcon class="w-7 h-7" /> -->
+                    Clear
+                </button>
+            </div>
+        </div>
+    </Drawer>
+
+
+    <!--Sort Drawer-->
+    <Drawer 
+        v-model="isSortColumns"
+        title="Sort Columns"
+    >
+        <div class="flex flex-col gap-4">
+
+            <div class="">
+                <div class="relative rounded-md shadow-sm">
+                    <select id="column" name="column"
+                        class="appearance-none block w-full rounded-md border-0 py-2.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2"
+                        @change="(e) => {
+                            sort.column = e.target.value;
+                        }"
+                    >
+                        <option :selected="sort.column === null" disabled>Select Column</option>
+                        <option 
+                            v-for="(column, index) in props.columns" :key="index"
+                            :selected="column == sort.column"
+                        >
+                            {{ column }}
+                        </option>
+                    </select>
+                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 rotate-90">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+                        </svg>
+                    </div>
+                </div>
+            </div>
+
+            <div class="">
+                <div class="relative rounded-md shadow-sm">
+                    <select id="order" name="order"
+                        class="appearance-none block w-full rounded-md border-0 py-2.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2"
+                        @change="(e) => {
+                            sort.order = e.target.value;
+                        }"
+                    >
+                        <option :selected="sort.order === null" disabled>Select Order</option>
+                        <option v-for="value in ['ASC', 'DESC']" :key="value" :selected="value == sort.order">
+                            {{ value }}
+                        </option>
+                    </select>
+                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 rotate-90">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+                        </svg>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex flex-row gap-2">
+                <button 
+                    type="button"
+                    class="flex-1 rounded-md bg-gray-800 px-3 py-3 text-sm font-semibold text-white shadow-sm hover:bg-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600"
+                    @click="emit('recall', null, perPageDataLimit, filter, sort)"
+                >
+                    Sort
+                </button>
+                <button 
+                    class="flex-1 border-2 border-black p-1 rounded-md hover:bg-red-500 hover:text-white"
+                    @click="(e) => {
+                        sort = clearObject(sort);
+                        emit('recall', null, perPageDataLimit, filter, sort);
+                    }"
+                >
+                    <!-- <XCircleIcon class="w-7 h-7" /> -->
+                    Clear
+                </button>
+            </div>
+        </div>
+    </Drawer>
+
+
 </template>
 <script setup>
 import { ref, computed } from "vue";
 import { ArrowLongLeftIcon, ArrowLongRightIcon } from "@heroicons/vue/20/solid";
 import { ArrowsRightLeftIcon, XCircleIcon } from "@heroicons/vue/24/outline";
 import { getParamsFromUrl, clearObject } from '../../Utils/common';
+import Drawer from '../../Components/Drawer';
 
 const props = defineProps({
     columns: Array,
@@ -292,6 +375,14 @@ const paginationLinks = computed(() => {
         prevLinks: links.slice(0, links.lenght - 3),
         nextLinks: links.slice(-(links.lenght - 3)),
     };
+});
+
+const isSidebar = ref(true);
+const isAdvanceSearch = ref(false);
+const isSortColumns = ref(false);
+
+defineExpose({
+    isSidebar
 });
 </script>
 

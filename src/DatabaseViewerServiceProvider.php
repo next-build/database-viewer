@@ -22,6 +22,8 @@ class DatabaseViewerServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
+        $this->mergeConfigFrom(self::basePath("/config/{$this->name}.php"), $this->name);
+
         $this->app->bind('database-viewer', function ($app) {
             return new \SaptarshiDy\DatabaseViewer\DatabaseViewer();
         });
@@ -34,12 +36,10 @@ class DatabaseViewerServiceProvider extends ServiceProvider
         }
 
         // Route::group([
-        //     'domain' => null,
-        //     'prefix' => Str::finish('database-viewer', '/').'api',
-        //     'namespace' => 'SaptarshiDy\DatabaseViewer\Http\Controllers',
-        //     'middleware' => null,
+        //     'middleware' => 'auth',
         // ], function () {
-            
+        //     $this->loadRoutesFrom(__DIR__.'/../routes/web.php');
+        //     $this->loadRoutesFrom(__DIR__.'/../routes/api.php');
         // });
 
         // Route::group([
@@ -51,12 +51,13 @@ class DatabaseViewerServiceProvider extends ServiceProvider
             
         // });
 
-        $this->loadRoutesFrom(__DIR__.'/../routes/web.php');
-        $this->loadRoutesFrom(__DIR__.'/../routes/api.php');
+        Route::middleware(config('database-viewer.middleware'))->group(function () {
+            $this->loadRoutesFrom(__DIR__.'/../routes/web.php');
+        });
 
-        
-        
-
+        Route::middleware(config('database-viewer.api_middleware'))->group(function () {
+            $this->loadRoutesFrom(__DIR__.'/../routes/api.php');
+        });
         
     }
 
@@ -65,6 +66,22 @@ class DatabaseViewerServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        if ($this->app->runningInConsole()) {
+            // publishing the config
+            $this->publishes([
+                self::basePath("/config/{$this->name}.php") => config_path("{$this->name}.php"),
+            ], "{$this->name}-config");
+
+            $this->publishes([
+                self::basePath('/resources/views') => resource_path("views/vendor/{$this->name}"),
+            ], "{$this->name}-views");
+
+            // registering the command
+            $this->commands([
+                PublishCommand::class,
+            ]);
+        }
+
         $this->registerRoutes();
         $this->registerResources();
         $this->defineAssetPublishing();

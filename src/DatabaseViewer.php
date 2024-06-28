@@ -7,7 +7,7 @@ class DatabaseViewer
 
     public function index(): String
     {
-        return 'DDDD';
+        
     }
 
 }

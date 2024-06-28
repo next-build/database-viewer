@@ -1,12 +1,13 @@
 <template>
     <Sidebar 
+        v-if="tableRef?.isSidebar === undefine || tableRef?.isSidebar === true"
         @selectTable="(x, y) => {
             database = x;
             table = y;
             handleLoadTable();
         }"
     />
-    <div class="lg:pl-72">
+    <div :class="[(tableRef?.isSidebar === undefine || tableRef?.isSidebar === true) && 'lg:pl-72']">
         <!-- <Header /> -->
 
         <main class="py-2">
@@ -17,6 +18,7 @@
                     v-if="tableData.columns.length !== 0"
                 >
                     <Table
+                        ref="tableRef"
                         :columns="tableData.columns"
                         :records="tableData.records"
                         @recall="handleLoadTable"
@@ -57,4 +59,6 @@ const handleLoadTable = async (page, paginate, filter, sort) => {
         tableData.value.records = data.records;
     }
 }
+
+const tableRef = ref();
 </script>

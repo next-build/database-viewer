@@ -6,7 +6,6 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
-
 Route::get('database-viewer', function() {
     return view('log-viewer::dashboard', []);
 })->name('database-viewer.dashboard');
@@ -22,6 +21,10 @@ Route::get('database-viewer/{table}', function($table) {
     ]);
 
 })->name('database-viewer.table.view');
+
+
+
+
 
 // Route::get('database-viewer', function () {
 //     config('database.connections');
