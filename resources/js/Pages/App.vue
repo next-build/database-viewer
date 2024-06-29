@@ -15,7 +15,7 @@
 
                 <!--Table-->
                 <div 
-                    v-if="tableData.columns.length !== 0"
+                    v-if="tableData.columns.length !== 0 && isTableLoading === false"
                 >
                     <Table
                         ref="tableRef"
@@ -23,6 +23,13 @@
                         :records="tableData.records"
                         @recall="handleLoadTable"
                     />
+                </div>
+
+                <!--Loading-->
+                <div v-else-if="isTableLoading === true" class="flex justify-center items-center mt-16">
+                    <span class="text-xl md:text-3xl font-medium">
+                        Loading...
+                    </span>
                 </div>
 
                 <!--Default-->
@@ -52,12 +59,16 @@ const tableData = ref({
     records: []
 });
 
+const isTableLoading = ref(false);
+
 const handleLoadTable = async (page, paginate, filter, sort) => {
+    isTableLoading.value = true;
     const data = await fetchDatabaseTable(database.value, table.value, page, paginate, filter, sort);
     if (data.length !== 0) {
         tableData.value.columns = data.columns;
         tableData.value.records = data.records;
     }
+    isTableLoading.value = false;
 }
 
 const tableRef = ref();

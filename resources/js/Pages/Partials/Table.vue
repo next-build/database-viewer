@@ -62,7 +62,7 @@
             <button 
                 type="button"
                 class="rounded-md bg-gray-800 px-3 py-3 text-sm font-semibold text-white shadow-sm hover:bg-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600"
-                @click="emit('recall', null, perPageDataLimit, filter, sort)"
+                @click="isColumnsVisibility =! isColumnsVisibility"
             >
                 Columns Visibility
             </button>
@@ -95,20 +95,20 @@
         <table class="mb-4" :style="{ width: 'max-content', minWidth: '100%' }">
             <thead>
                 <tr>
-                    <th v-for="(header, index) in props.columns" :key="index"
+                    <th v-for="(header, index) in columns.filter(item => item.visibility === true)" :key="index"
                         class="px-4 py-2 bg-gray-200 border border-gray-300">
                         <!-- <div
                             class="resize-handle absolute top-0 bottom-0 right-0 w-4 bg-gray-400 hover:bg-gray-500 cursor-col-resize"
                         ></div> -->
-                        {{ header }}
+                        {{ header.label }}
                     </th>
                 </tr>
             </thead>
             <tbody>
                 <tr v-for="(row, rowIndex) in props.records.data" :key="rowIndex" class="hover:bg-gray-100">
-                    <td v-for="(cell, cellIndex) in row" :key="cellIndex" class="px-4 py-2 border border-gray-300">
+                    <td v-for="(column, columnIndex) in columns.filter(item => item.visibility === true)" :key="columnIndex" class="px-4 py-2 border border-gray-300">
                         <div class="truncate max-w-52">
-                            {{ cell }}
+                            {{ row[column.label] }}
                         </div>
                     </td>
                 </tr>
@@ -235,7 +235,7 @@
             <div class="">
                 <input type="text" name="query" id="query" autocomplete="false"
                     class="block w-full rounded-md border-0 py-2.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400"
-                    placeholder="Search.."
+                    placeholder="Keyword..."
                     @input="(e) => filter.query = e.target.value"
                     :value="filter.query"
                 >
@@ -338,10 +338,38 @@
         </div>
     </Drawer>
 
+    <!--Columns Visibility-->
+    <Drawer 
+        v-model="isColumnsVisibility"
+        title="Sort Columns"
+    >
+        <div class="flex flex-col gap-4">
+
+            <div 
+                v-for="(column, index) in columns" :key="index"
+                class="flex p-3 rounded-md border-2 cursor-pointer hover:bg-gray-100"
+                @click="() => column.visibility =! column.visibility"
+            >
+                <div class="flex-1">
+                    {{ column.label }}
+                </div>
+                <div class="flex-2">
+                    <svg v-if="column.visibility" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                    </svg>
+                    <svg v-else xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M3.98 8.223A10.477 10.477 0 0 0 1.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.451 10.451 0 0 1 12 4.5c4.756 0 8.773 3.162 10.065 7.498a10.522 10.522 0 0 1-4.293 5.774M6.228 6.228 3 3m3.228 3.228 3.65 3.65m7.894 7.894L21 21m-3.228-3.228-3.65-3.65m0 0a3 3 0 1 0-4.243-4.243m4.242 4.242L9.88 9.88" />
+                    </svg>
+                </div>
+            </div>
+            
+        </div>
+    </Drawer>
 
 </template>
 <script setup>
-import { ref, computed } from "vue";
+import { ref, computed, onMounted } from "vue";
 import { ArrowLongLeftIcon, ArrowLongRightIcon } from "@heroicons/vue/20/solid";
 import { ArrowsRightLeftIcon, XCircleIcon } from "@heroicons/vue/24/outline";
 import { getParamsFromUrl, clearObject } from '../../Utils/common';
@@ -352,7 +380,15 @@ const props = defineProps({
     records: Object,
 });
 
-const emit = defineEmits(["recall"]);
+const columns = ref([]);
+const modifyColumns = () => {
+    props.columns.forEach(column => {
+        columns.value.push({
+            label: column,
+            visibility: true,
+        })
+    });
+};
 
 const operators = ['=', '!=', '>', '>=', '<', '<='];
 
@@ -380,9 +416,16 @@ const paginationLinks = computed(() => {
 const isSidebar = ref(true);
 const isAdvanceSearch = ref(false);
 const isSortColumns = ref(false);
+const isColumnsVisibility = ref(false);
+
+const emit = defineEmits(["recall"]);
 
 defineExpose({
     isSidebar
+});
+
+onMounted(() => {
+    modifyColumns()
 });
 </script>
 
@@ -408,19 +451,19 @@ defineExpose({
 } */
 
 .table-scrollbar::-webkit-scrollbar {
-    width: 4px;
+    width: 2px;
 }
 
 /* Track */
 .table-scrollbar::-webkit-scrollbar-track {
-    background: #f1f1f1;
-    box-shadow: inset 0 0 5px grey;
-    border-radius: 10px;
+    background: #f4f0f0;
+    box-shadow: inset 0 0 5px rgb(208, 208, 208);
+    border-radius: 6px;
 }
 
 /* Handle */
 .table-scrollbar::-webkit-scrollbar-thumb {
-    background: #c9c9c9;
-    border-radius: 10px;
+    background: #d5d2d2;
+    border-radius: 6px;
 }
 </style>

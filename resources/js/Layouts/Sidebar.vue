@@ -137,9 +137,9 @@
                     <span class="text-lg font-semibold leading-6 text-white">
                         Database
                     </span>
-                    <div class="border border-gray-400 mt-2 rounded">
+                    <!-- <div class="border border-gray-400 mt-2 rounded">
                         <select 
-                            class="block w-full rounded border-0 py-1.5 pl-1 pr-10 ring-inherit bg-transparent text-gray-400 font-semibold text-lg sm:leading-6"
+                            class="appearance-none block w-full rounded border-0 py-2 pl-2 pr-10 ring-inherit bg-transparent text-white font-semibold text-base"
                             @change="(e) => {
                                 selectedDatabase = e.target.value;
                                 handleTables(e.target.value);
@@ -155,10 +155,39 @@
                                 {{ database }}
                             </option>
                         </select>
+                    </div> -->
+
+                    <div class="mt-2">
+                        <div class="relative rounded-md shadow-sm">
+                            <select id="column" name="column"
+                                class="appearance-none block w-full rounded-md py-2.5 pl-3 pr-10 text-white text-md bg-transparent ring-1 ring-gray-400"
+                                @change="(e) => {
+                                    selectedDatabase = e.target.value;
+                                    handleTables(e.target.value);
+                                }"
+                            >
+                                <option class="text-md text-gray-400" selected disabled>
+                                    Select Database
+                                </option>
+                                <option 
+                                    class="text-md text-gray-900" 
+                                    v-for="(database, index) in databases" :key="index"
+                                >
+                                    {{ database }}
+                                </option>
+                            </select>
+                            <div class="text-white pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 rotate-90">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+                                </svg>
+                            </div>
+                        </div>
                     </div>
+
+
                 </div>
 
-                <div class="-mx-2">
+                <div v-if="selectedDatabase" class="-mx-2">
 
                     <span class="text-lg font-semibold leading-6 text-white">
                         Tables
@@ -166,7 +195,7 @@
 
                     <input 
                         type="text" name="table" id="table"
-                        class="mt-2 mb-4 block w-full rounded-md border border-gray-400 py-2 bg-transparent focus:bg-gray-800 p-2 text-md text-white font-semibold focus:text-white shadow-sm placeholder:text-base placeholder:text-gray-400 placeholder:font-semibold"
+                        class="mt-2 mb-4 block w-full rounded-md border border-gray-400 py-2 bg-transparent focus:bg-gray-800 p-2 text-md text-white focus:text-white shadow-sm placeholder:text-base placeholder:text-gray-500"
                         placeholder="Search Table"
                         @input="(e) => {
                             tableSearch = e.target.value
@@ -184,13 +213,14 @@
                                     >
                                         <a
                                             @click="() => {
+                                                selectedTable = table;
                                                 emit('selectTable', selectedDatabase, table);
                                             }"
                                             :class="[
-                                                table.current
+                                                selectedTable == table
                                                     ? 'bg-gray-800 text-white'
-                                                    : 'text-gray-400 border border-gray-400 hover:text-white hover:bg-gray-800',
-                                                'group flex gap-x-3 rounded-md p-2 text-md leading-6 font-semibold cursor-pointer',
+                                                    : 'text-gray-400 hover:text-white hover:bg-gray-800',
+                                                'border border-gray-400 group flex gap-x-3 rounded-md p-2 text-md leading-6 cursor-pointer',
                                             ]"
                                         >
                                             <!-- <component
@@ -240,12 +270,22 @@ import {
 import { ChevronDownIcon, MagnifyingGlassIcon } from "@heroicons/vue/20/solid";
 import { fetchDatabases, fetchTables } from '../Utils/api';
 
+import {
+  Listbox,
+  ListboxLabel,
+  ListboxButton,
+  ListboxOptions,
+  ListboxOption,
+} from '@headlessui/vue'
+import { CheckIcon, ChevronUpDownIcon } from '@heroicons/vue/20/solid'
+
 const emit = defineEmits(['selectTable']);
 
 const tables = ref([]);
 const databases = ref([]);
 
 const selectedDatabase = ref(null);
+const selectedTable = ref(null);
 
 const tableSearch = ref(null);
 
@@ -288,4 +328,19 @@ onMounted( async () => {
 .navigation-scroller::-webkit-scrollbar-thumb:hover {
     background: #555;
 }
+
+/* .select-arrow {
+    
+}
+
+.select-arrow::after {
+    content: '\25BC';
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+    font-size: 12px;
+    color: #333;
+} */
 </style>
