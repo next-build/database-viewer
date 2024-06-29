@@ -1,4 +1,4 @@
-@extends('log-viewer::app')
+@extends('database-viewer::app')
 
 @section('title', 'Home Page')
 

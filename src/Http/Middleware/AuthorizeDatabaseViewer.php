@@ -18,7 +18,7 @@ class AuthorizeDatabaseViewer
         // ) {
         //     abort(403);
         // }
-
+        
         // DatabaseViewer::auth();
 
         return $next($request);
