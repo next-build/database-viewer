@@ -27,73 +27,16 @@ class DatabaseViewerServiceProvider extends ServiceProvider
         $this->app->bind('database-viewer', function ($app) {
             return new \NextBuild\DatabaseViewer\DatabaseViewer();
         });
-
-        if ($this->app->runningInConsole()) {
-            // registering the command
-            $this->commands([
-                PublishCommand::class,
-            ]);
-        }
-
-        // Route::group([
-        //     'middleware' => 'auth',
-        // ], function () {
-        //     $this->loadRoutesFrom(__DIR__.'/../routes/web.php');
-        //     $this->loadRoutesFrom(__DIR__.'/../routes/api.php');
-        // });
-
-        // Route::group([
-        //     'domain' => null,
-        //     'prefix' => 'database-viewer',
-        //     'namespace' => 'NextBuild\DatabaseViewer\Http\Controllers',
-        //     'middleware' => null,
-        // ], function () {
-            
-        // });
-
-        // $this->loadRoutesFrom(__DIR__.'/../routes/web.php');
-
-        // Route::middleware(config('database-viewer.middleware'))->group(function () {
-        //     $this->loadRoutesFrom(__DIR__.'/../routes/web.php');
-        // });
-
-        // Route::group([
-        //     // 'domain' => config('database-viewer.route_domain', null),
-        //     // 'prefix' => Str::finish(config('database-viewer.route_path'), '/').'api',
-        //     // 'namespace' => 'Opcodes\LogViewer\Http\Controllers',
-        //     'middleware' => config('database-viewer.middleware', []),
-        // ], function () {
-        //     $this->loadRoutesFrom(__DIR__.'/../routes/web.php');
-        // });
-
-        // Route::group([
-        //     // 'domain' => config('database-viewer.route_domain', null),
-        //     // 'prefix' => Str::finish(config('database-viewer.route_path'), '/').'api',
-        //     // 'namespace' => 'Opcodes\LogViewer\Http\Controllers',
-        //     'middleware' => config('database-viewer.api_middleware', null),
-        // ], function () {
-        //     $this->loadRoutesFrom(__DIR__.'/../routes/api.php');
-        // });
-
-
-        // Route::middleware(config('database-viewer.api_middleware'))->group(function () {
-        //     $this->loadRoutesFrom(__DIR__.'/../routes/api.php');
-        // });
-
-
-        $this->loadRoutesFrom(__DIR__.'/../routes/web.php');
-        $this->loadRoutesFrom(__DIR__.'/../routes/api.php');
-        
     }
 
     /**
-     * 
+     * Bootstrap any package services.
      */
     public function boot(): void
     {
         if ($this->app->runningInConsole()) {
 
-            // publishing the config
+            // publishing config
             $this->publishes([
                 self::basePath("/config/{$this->name}.php") => config_path("{$this->name}.php"),
             ], "{$this->name}-config");
@@ -103,7 +46,7 @@ class DatabaseViewerServiceProvider extends ServiceProvider
                 self::basePath('/resources/views') => resource_path("views/vendor/{$this->name}"),
             ], "{$this->name}-views");
 
-            // registering the command
+            // registering command
             $this->commands([
                 PublishCommand::class,
             ]);
@@ -122,30 +65,13 @@ class DatabaseViewerServiceProvider extends ServiceProvider
      */
     protected function registerRoutes()
     {
-        // For Web
-        Route::group([
-            // 'domain' => config('database-viewer.route_domain', null),
-            // 'prefix' => config('database-viewer.route_path'),
-            // 'namespace' => 'Opcodes\LogViewer\Http\Controllers',
-            // 'middleware' => config('database-viewer.middleware', null),
-        ], function () {
-            $this->loadRoutesFrom(self::basePath('/routes/web.php'));
-        });
-
-        // For Apis
-        // Route::group([
-        //     'domain' => config('database-viewer.route_domain', null),
-        //     'prefix' => Str::finish(config('database-viewer.route_path'), '/').'api',
-        //     'namespace' => 'Opcodes\LogViewer\Http\Controllers',
-        //     'middleware' => config('database-viewer.api_middleware', null),
-        // ], function () {
-        //     $this->loadRoutesFrom(self::basePath('/routes/api.php'));
-        // });
+        $this->loadRoutesFrom(self::basePath('/routes/web.php'));
+        $this->loadRoutesFrom(self::basePath('/routes/api.php'));
     }
 
     protected function registerResources()
     {
-        $this->loadViewsFrom(self::basePath('/resources/views'), 'database-viewer');
+        $this->loadViewsFrom(self::basePath('/resources/views'), "{$this->name}");
     }
 
     protected function defineAssetPublishing()
