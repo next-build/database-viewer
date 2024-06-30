@@ -4,7 +4,7 @@
     "keywords": [
         "laravel",
         "database-viewer",
-        "database-manager",
+        "database-manager"
     ],
     "homepage": "https://github.com/Next-Build/database-viewer",
     "license": "MIT",
