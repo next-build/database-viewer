@@ -32,7 +32,7 @@ Once the installation is complete, you will be able to access **Database Viewer*
 
 By default, the application is available at: `{APP_URL}/database-viewer`.
 
-(for example: `https://my-app.test/log-viewer`)
+(for example: `https://my-app.test/database-viewer`)
 
 ## Troubleshooting
 
