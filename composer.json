@@ -1,7 +1,12 @@
 {
     "name": "nextbuild/database-viewer",
     "description": "A Laravel package for viewing databases",
-    "type": "composer-plugin",
+    "keywords": [
+        "laravel",
+        "database-viewer",
+        "database-manager",
+    ],
+    "homepage": "https://github.com/Next-Build/database-viewer",
     "license": "MIT",
     "autoload": {
         "psr-4": {
@@ -11,7 +16,8 @@
     "authors": [
         {
             "name": "Saptarshi Dey",
-            "email": "saptarshi7047@gmail.com"
+            "email": "saptarshi7047@gmail.com",
+            "role": "Developer"
         }
     ],
     "minimum-stability": "dev",
