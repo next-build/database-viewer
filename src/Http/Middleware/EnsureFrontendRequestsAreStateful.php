@@ -1,6 +1,6 @@
 <?php
 
-namespace SaptarshiDy\DatabaseViewer\Http\Middleware;
+namespace NextBuild\DatabaseViewer\Http\Middleware;
 
 use Illuminate\Routing\Pipeline;
 use Illuminate\Support\Collection;

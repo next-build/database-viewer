@@ -1,12 +1,12 @@
 <?php
 
-namespace SaptarshiDy\DatabaseViewer;
+namespace NextBuild\DatabaseViewer;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Str;
 
-use SaptarshiDy\DatabaseViewer\Console\Commands\PublishCommand;
+use NextBuild\DatabaseViewer\Console\Commands\PublishCommand;
 
 class DatabaseViewerServiceProvider extends ServiceProvider 
 {
@@ -25,7 +25,7 @@ class DatabaseViewerServiceProvider extends ServiceProvider
         $this->mergeConfigFrom(self::basePath("/config/{$this->name}.php"), "{$this->name}-config");
 
         $this->app->bind('database-viewer', function ($app) {
-            return new \SaptarshiDy\DatabaseViewer\DatabaseViewer();
+            return new \NextBuild\DatabaseViewer\DatabaseViewer();
         });
 
         if ($this->app->runningInConsole()) {
@@ -45,7 +45,7 @@ class DatabaseViewerServiceProvider extends ServiceProvider
         // Route::group([
         //     'domain' => null,
         //     'prefix' => 'database-viewer',
-        //     'namespace' => 'SaptarshiDy\DatabaseViewer\Http\Controllers',
+        //     'namespace' => 'NextBuild\DatabaseViewer\Http\Controllers',
         //     'middleware' => null,
         // ], function () {
             

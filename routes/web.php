@@ -1,6 +1,6 @@
 <?php
 
-use SaptarshiDy\DatabaseViewer;
+use NextBuild\DatabaseViewer;
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\DB;

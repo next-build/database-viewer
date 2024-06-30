@@ -1,11 +1,11 @@
 <?php
 
-namespace SaptarshiDy\DatabaseViewer\Facades;
+namespace NextBuild\DatabaseViewer\Facades;
 
 use Illuminate\Support\Facades\Facade;
 
 /**
- * @see \SaptarshiDy\DatabaseViewer\DatabaseViewer
+ * @see \NextBuild\DatabaseViewer\DatabaseViewer
  */
 class DatabaseViewer extends Facade
 {

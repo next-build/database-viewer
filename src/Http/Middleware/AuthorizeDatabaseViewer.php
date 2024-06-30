@@ -1,10 +1,10 @@
 <?php
 
-namespace SaptarshiDy\DatabaseViewer\Http\Middleware;
+namespace NextBuild\DatabaseViewer\Http\Middleware;
 
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Gate;
-use SaptarshiDy\DatabaseViewer\Facades\DatabaseViewer;
+use NextBuild\DatabaseViewer\Facades\DatabaseViewer;
 
 class AuthorizeDatabaseViewer
 {

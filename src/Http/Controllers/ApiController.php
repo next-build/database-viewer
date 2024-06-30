@@ -1,6 +1,6 @@
 <?php
 
-namespace SaptarshiDy\DatabaseViewer\Http\Controllers;
+namespace NextBuild\DatabaseViewer\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;

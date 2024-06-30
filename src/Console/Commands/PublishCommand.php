@@ -1,10 +1,10 @@
 <?php
 
-namespace SaptarshiDy\DatabaseViewer\Console\Commands;
+namespace NextBuild\DatabaseViewer\Console\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Str;
-use SaptarshiDy\DatabaseViewer\DatabaseViewerServiceProvider;
+use NextBuild\DatabaseViewer\DatabaseViewerServiceProvider;
 use Spatie\Watcher\Watch;
 
 class PublishCommand extends Command

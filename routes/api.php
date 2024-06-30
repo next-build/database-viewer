@@ -1,13 +1,13 @@
 <?php
 
-use SaptarshiDy\DatabaseViewer;
+use NextBuild\DatabaseViewer;
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 // Import Controllers
-use SaptarshiDy\DatabaseViewer\Http\Controllers\ApiController;
+use NextBuild\DatabaseViewer\Http\Controllers\ApiController;
 
 
 Route::middleware(config('database-viewer.api_middleware', []))->group(function () {

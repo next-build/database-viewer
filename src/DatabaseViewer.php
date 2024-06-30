@@ -1,6 +1,6 @@
 <?php
 
-namespace SaptarshiDy\DatabaseViewer;
+namespace NextBuild\DatabaseViewer;
 
 class DatabaseViewer
 {
