@@ -1,5 +1,5 @@
 {
-    "name": "saptarshidey/database-viewer",
+    "name": "nextbuild/database-viewer",
     "description": "A Laravel package for viewing databases",
     "type": "composer-plugin",
     "license": "MIT",
