@@ -35,7 +35,7 @@ Documentation can be found on the [official website](#).
 To install the package via composer, Run:
 
 ```bash
-composer require next-build/database-viewer
+composer require nextbuild/database-viewer
 ```
 
 After installing the package, publish the front-end assets by running:
