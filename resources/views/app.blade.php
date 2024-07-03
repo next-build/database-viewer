@@ -12,7 +12,7 @@
     <title>Database Viewer{{ config('app.name') ? ' - ' . config('app.name') : '' }}</title>
 
     <!-- Style sheets-->
-    <link href="{{ asset(mix('app.css', 'vendor/database-viewer')) }}" rel="stylesheet" onerror="alert('app.css failed to load. Please refresh the page, re-publish Log Viewer assets, or fix routing for vendor assets.')">
+    <link href="{{ asset(mix('app.css', 'vendor/database-viewer')) }}" rel="stylesheet" onerror="alert('app.css failed to load. Please refresh the page, re-publish Database Viewer assets, or fix routing for vendor assets.')">
 </head>
 
 <body>
@@ -23,7 +23,7 @@
 
     </div>
 
-    <script src="{{ asset(mix('app.js', 'vendor/database-viewer')) }}" onerror="alert('app.js failed to load. Please refresh the page, re-publish Log Viewer assets, or fix routing for vendor assets.')"></script>
+    <script src="{{ asset(mix('app.js', 'vendor/database-viewer')) }}" onerror="alert('app.js failed to load. Please refresh the page, re-publish Database Viewer assets, or fix routing for vendor assets.')"></script>
 </body>
 
 </html>
