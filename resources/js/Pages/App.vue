@@ -1,21 +1,20 @@
 <template>
     <Sidebar 
         v-if="tableRef?.isSidebar === undefine || tableRef?.isSidebar === true"
-        @selectTable="(x, y) => {
-            database = x;
-            table = y;
+        @selectTable="(selectedDatabase, selectedTable) => {
+            database = selectedDatabase;
+            table = selectedTable;
             handleLoadTable();
         }"
     />
     <div :class="[(tableRef?.isSidebar === undefine || tableRef?.isSidebar === true) && 'lg:pl-72']">
-        <!-- <Header /> -->
 
         <main class="py-2">
             <div class="px-4 sm:px-6 lg:px-8">
 
                 <!--Table-->
                 <div 
-                    v-if="tableData.columns.length !== 0 && isTableLoading === false"
+                    v-if="tableData.columns.length !== 0"
                 >
                     <Table
                         ref="tableRef"
@@ -23,13 +22,6 @@
                         :records="tableData.records"
                         @recall="handleLoadTable"
                     />
-                </div>
-
-                <!--Loading-->
-                <div v-else-if="isTableLoading === true" class="flex justify-center items-center mt-16">
-                    <span class="text-xl md:text-3xl font-medium">
-                        Loading...
-                    </span>
                 </div>
 
                 <!--Default-->
@@ -41,14 +33,19 @@
 
             </div>
         </main>
+
+        <!--Loader-->
+        <LoadingDialog 
+            :loading="isTableLoading"
+        />
         
     </div>
 </template>
 <script setup>
 import { ref } from 'vue';
-import Header from '../Layouts/Header';
 import Sidebar from '../Layouts/Sidebar';
 import Table from './Partials/Table';
+import LoadingDialog from '../Components/LoadingDialog';
 import { fetchDatabaseTable } from '../Utils/api';
 
 const database = ref(null);
@@ -59,6 +56,7 @@ const tableData = ref({
     records: []
 });
 
+const tableRef = ref();
 const isTableLoading = ref(false);
 
 const handleLoadTable = async (page, paginate, filter, sort) => {
@@ -70,6 +68,4 @@ const handleLoadTable = async (page, paginate, filter, sort) => {
     }
     isTableLoading.value = false;
 }
-
-const tableRef = ref();
 </script>
