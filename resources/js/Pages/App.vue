@@ -1,13 +1,16 @@
 <template>
     <Sidebar 
-        v-if="tableRef?.isSidebar === undefine || tableRef?.isSidebar === true"
         @selectTable="(selectedDatabase, selectedTable) => {
             database = selectedDatabase;
             table = selectedTable;
             handleLoadTable();
         }"
+        :sidebarOpen="sidebarOpen"
+        @updateSidebarOpen="(state) => {
+            sidebarOpen = !state
+        }"
     />
-    <div :class="[(tableRef?.isSidebar === undefine || tableRef?.isSidebar === true) && 'lg:pl-72']">
+    <div :class="[(sidebarOpen === true) && 'lg:pl-72']">
 
         <main class="py-2">
             <div class="px-4 sm:px-6 lg:px-8">
@@ -17,19 +20,29 @@
                     v-if="tableData.columns.length !== 0"
                 >
                     <Table
-                        ref="tableRef"
                         :key="tableKey"
                         :columns="tableData.columns"
                         :records="tableData.records"
                         @recall="handleLoadTable"
+                        :sidebarOpen="sidebarOpen"
+                        @updateSidebarOpen="(state) => {
+                            sidebarOpen = !state
+                        }"
                     />
                 </div>
 
                 <!--Default-->
-                <div v-else class="flex justify-center items-center mt-16">
-                    <span class="text-xl md:text-3xl font-medium">
+                <div v-else class="flex flex-col gap-4 justify-center items-center mt-16">
+                    <span class="text-2xl md:text-3xl font-medium text-center">
                         Select database & table from sidebar to view data 🤘
                     </span>
+                    <button 
+                        type="button"
+                        class="block md:hidden rounded-md bg-gray-800 px-3 py-3 text-sm font-semibold text-white shadow-sm hover:bg-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600"
+                        @click="sidebarOpen = !sidebarOpen"
+                    >
+                        Select Database & Table
+                    </button>
                 </div>
 
             </div>
@@ -57,9 +70,9 @@ const tableData = ref({
     records: []
 });
 
-const tableRef = ref();
 const tableKey = ref(0);
 const isTableLoading = ref(false);
+const sidebarOpen = ref(true);
 
 const handleLoadTable = async (page, paginate, filter, sort) => {
     isTableLoading.value = true;

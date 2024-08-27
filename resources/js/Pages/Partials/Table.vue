@@ -10,21 +10,21 @@
             <button 
                 type="button"
                 class="rounded-md bg-gray-800 px-3 py-3 text-sm font-semibold text-white shadow-sm hover:bg-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600"
-                @click="isSidebar =! isSidebar"
+                @click="() => emit('updateSidebarOpen', sidebarOpen)"
             >
                 <svg 
-                    v-if="isSidebar"
-                    xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                    v-if="sidebarOpen"
+                    xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                    stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-left"
+                    stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 lucide lucide-chevron-left"
                 >
                     <path d="m15 18-6-6 6-6"/>
                 </svg>
                 <svg 
                     v-else
-                    xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                    xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                    stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right"
+                    stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 lucide lucide-chevron-right"
                 >
                     <path d="m9 18 6-6-6-6"/>
                 </svg>
@@ -36,14 +36,73 @@
                 class="rounded-md bg-gray-800 px-3 py-3 text-sm font-semibold text-white shadow-sm hover:bg-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600"
                 @click="emit('recall', null, perPageDataLimit, filter, sort)"
             >
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-rotate-cw">
+                <svg 
+                    xmlns="http://www.w3.org/2000/svg" 
+                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" 
+                    class="w-5 h-5 lucide lucide-rotate-cw"
+                >
                     <path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/>
                 </svg>
             </button>
 
         </div>
 
-        <div class="flex-1 flex flex-row-reverse gap-4">
+        <div class="flex-1 flex flex-row-reverse items-center gap-4">
+
+            <DropDown class="block md:hidden" :items="dropDownItems">
+                
+                <template #toggle>
+                    <button 
+                        type="button"
+                        class="rounded-md bg-gray-800 px-3 py-3 text-sm font-semibold text-white shadow-sm hover:bg-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600"
+                    >
+                        <svg 
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" 
+                            class="w-5 h-5 lucide lucide-align-justify"
+                        >
+                            <line x1="3" x2="21" y1="6" y2="6"/><line x1="3" x2="21" y1="12" y2="12"/><line x1="3" x2="21" y1="18" y2="18"/>
+                        </svg>
+                    </button>
+                </template>
+
+                <template #columns_visibility="{ data, active }">
+                    <button 
+                        @click="isColumnsVisibility =! isColumnsVisibility"
+                        :class="[
+                            active ? 'bg-violet-500 text-white' : 'text-gray-900',
+                            'group flex w-full items-center rounded-md px-2 py-2 text-sm',
+                        ]"
+                    >
+                        {{ data.label }}
+                    </button>
+                </template>
+
+                <template #sort_columns="{ data, active }">
+                    <button 
+                        @click="isSortColumns =! isSortColumns"
+                        :class="[
+                            active ? 'bg-violet-500 text-white' : 'text-gray-900',
+                            'group flex w-full items-center rounded-md px-2 py-2 text-sm',
+                        ]"
+                    >
+                        {{ data.label }}
+                    </button>
+                </template>
+
+                <template #advance_search="{ data, active }">
+                    <button 
+                        @click="isAdvanceSearch =! isAdvanceSearch"
+                        :class="[
+                            active ? 'bg-violet-500 text-white' : 'text-gray-900',
+                            'group flex w-full items-center rounded-md px-2 py-2 text-sm',
+                        ]"
+                    >
+                        {{ data.label }}
+                    </button>
+                </template>
+
+            </DropDown>
 
             <!--Pagination-->
             <div class="">
@@ -67,10 +126,10 @@
                     </div>
                 </div>
             </div>
-
+            
             <button 
                 type="button"
-                class="rounded-md bg-gray-800 px-3 py-3 text-sm font-semibold text-white shadow-sm hover:bg-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600"
+                class="hidden md:block rounded-md bg-gray-800 px-3 py-3 text-sm font-semibold text-white shadow-sm hover:bg-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600"
                 @click="isColumnsVisibility =! isColumnsVisibility"
             >
                 Columns Visibility
@@ -78,7 +137,7 @@
 
             <button 
                 type="button"
-                class="rounded-md bg-gray-800 px-3 py-3 text-sm font-semibold text-white shadow-sm hover:bg-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600"
+                class="hidden md:block rounded-md bg-gray-800 px-3 py-3 text-sm font-semibold text-white shadow-sm hover:bg-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600"
                 @click="isSortColumns =! isSortColumns"
             >
                 Sort Columns
@@ -86,7 +145,7 @@
 
             <button 
                 type="button"
-                class="rounded-md bg-gray-800 px-3 py-3 text-sm font-semibold text-white shadow-sm hover:bg-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600"
+                class="hidden md:block rounded-md bg-gray-800 px-3 py-3 text-sm font-semibold text-white shadow-sm hover:bg-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600"
                 @click="isAdvanceSearch =! isAdvanceSearch"
             >
                 Advance Search
@@ -147,7 +206,7 @@
                 </button>
             </div>
             <div class="hidden md:-mt-px md:flex">
-                <button v-for="link in paginationLinks.prevLinks" 
+                <button v-for="(link, index) in paginationLinks.prevLinks" :key="index"
                     @click="() => {
                         emit('recall', link.label, perPageDataLimit, filter, sort);
                     }"
@@ -156,7 +215,7 @@
                 >
                     {{ link.label }}
                 </button>
-                <button v-for="link in paginationLinks.nextLinks" 
+                <button v-for="(link, index) in paginationLinks.nextLinks" :key="index"
                     @click="() => {
                         emit('recall', link.label, perPageDataLimit, filter, sort);
                     }"
@@ -383,10 +442,12 @@ import { ArrowLongLeftIcon, ArrowLongRightIcon } from "@heroicons/vue/20/solid";
 import { ArrowsRightLeftIcon, XCircleIcon } from "@heroicons/vue/24/outline";
 import { getParamsFromUrl, clearObject } from '../../Utils/common';
 import Drawer from '../../Components/Drawer';
+import DropDown from '../../Components/DropDown';
 
 const props = defineProps({
     columns: Array,
     records: Object,
+    sidebarOpen: Boolean,
 });
 
 const columns = ref([]);
@@ -422,16 +483,17 @@ const paginationLinks = computed(() => {
     };
 });
 
-const isSidebar = ref(true);
 const isAdvanceSearch = ref(false);
 const isSortColumns = ref(false);
 const isColumnsVisibility = ref(false);
 
-const emit = defineEmits(["recall"]);
+const dropDownItems = [
+    { label: 'Advance Search', key: 'advance_search' },
+    { label: 'Sort Columns', key: 'sort_columns' },
+    { label: 'Columns Visibility', key: 'columns_visibility' },
+];
 
-defineExpose({
-    isSidebar
-});
+const emit = defineEmits(["recall", "updateSidebarOpen"]);
 
 onMounted(() => {
     modifyColumns()
