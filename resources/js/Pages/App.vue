@@ -18,6 +18,7 @@
                 >
                     <Table
                         ref="tableRef"
+                        :key="tableKey"
                         :columns="tableData.columns"
                         :records="tableData.records"
                         @recall="handleLoadTable"
@@ -57,6 +58,7 @@ const tableData = ref({
 });
 
 const tableRef = ref();
+const tableKey = ref(0);
 const isTableLoading = ref(false);
 
 const handleLoadTable = async (page, paginate, filter, sort) => {
@@ -66,6 +68,7 @@ const handleLoadTable = async (page, paginate, filter, sort) => {
         tableData.value.columns = data.columns;
         tableData.value.records = data.records;
     }
+    tableKey.value += 1;
     isTableLoading.value = false;
 }
 </script>
