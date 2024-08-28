@@ -17,7 +17,7 @@
 <a href="https://packagist.org/packages/nextbuild/database-viewer"><img src="https://img.shields.io/badge/Laravel-8.x,%209.x,%2010.x,%2011.x-brightgreen.svg?style=flat-square" alt="Laravel Version"></a>
 </p>
 
-![database-viewer-banner](https://img.playbook.com/YEaOxvZzyYvp1ei6wzIlK3AKRISGH8qTb7-n1u2NYeA/Z3M6Ly9wbGF5Ym9v/ay1hc3NldHMtcHVi/bGljLzcxMTQ2NThi/LTM4MjAtNGFlMi05/NzQxLTc2OGQ0YjVh/MTdlYw)
+![database-viewer-banner](https://img.playbook.com/JIRPzflC6tGrWdRlcszNkvDN-Rv1jD7yirlcexcOhpA/Z3M6Ly9wbGF5Ym9v/ay1hc3NldHMtcHVi/bGljLzRlZTc5MWVm/LTk3MzItNDVkYi1h/YTU5LWRiOTQzNTFk/OTVjOA)
 
 ### Documentation
 
