@@ -62,6 +62,10 @@ By default, the application is available at: `{APP_URL}/database-viewer`.
 
 Here are some common problems and solutions.
 
+## Contributing
+
+Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
+
 ## Security Vulnerabilities
 
 Please review [our security policy](../../security/policy) on how to report security vulnerabilities.
